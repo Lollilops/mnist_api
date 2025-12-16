@@ -1,0 +1,6 @@
+service:
+  host: "0.0.0.0"
+  port: 8050
+
+web_master:
+  url: "http://web_master:8000"

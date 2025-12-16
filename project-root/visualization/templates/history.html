@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>History</title>
+</head>
+<body>
+    <h2>История предсказаний</h2>
+
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Предсказание</th>
+            <th>Уверенность</th>
+            <th>Время</th>
+        </tr>
+        {% for row in history %}
+        <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.predicted_label }}</td>
+            <td>{{ "%.2f"|format(row.confidence * 100) }}%</td>
+            <td>{{ row.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p><a href="/">Назад</a></p>
+</body>
+</html>
