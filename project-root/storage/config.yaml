@@ -1,0 +1,12 @@
+service:
+  host: "0.0.0.0"
+  port: 5000
+
+storage:
+  base_dir: "./storage_data"
+  images_dir: "images"
+  models_dir: "models"
+  database: "storage.db"
+
+logging:
+  log_file: "./storage.log"
