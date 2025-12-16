@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+
+  collector:
+    build: ./collector
+    container_name: collector
+    ports:
+      - "5001:5000"
+    volumes:
+      - collector_data:/app/data
+      - collector_user_data:/app/user_data
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  storage:
+    build: ./storage
+    container_name: storage
+    ports:
+      - "5002:5000"
+    volumes:
+      - storage_data:/app/storage_data
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  ml_service:
+    build: ./ml_service
+    container_name: ml_service
+    ports:
+      - "5003:5000"
+    volumes:
+      - ml_models:/app/models
+      - ml_data:/app/data
+    networks:
+      - app_network
+    restart: unless-stopped
+    depends_on:
+      - storage
+      - collector
+
+  web_master:
+    build: ./web_master
+    container_name: web_master
+    ports:
+      - "8000:8000"
+    networks:
+      - app_network
+    restart: unless-stopped
+    depends_on:
+      - collector
+      - storage
+      - ml_service
+
+  visualization:
+    build: ./visualization
+    container_name: visualization
+    ports:
+      - "8050:8050"
+    networks:
+      - app_network
+    depends_on:
+      - web_master
+
+
+# =========================
+# Volumes
+# =========================
+volumes:
+  collector_data:
+  collector_user_data:
+  storage_data:
+  ml_models:
+  ml_data:
+
+
+# =========================
+# Network
+# =========================
+networks:
+  app_network:
+    driver: bridge
