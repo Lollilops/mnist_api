@@ -1,0 +1,15 @@
+service:
+  host: "0.0.0.0"
+  port: 5000
+
+dataset:
+  name: "MNIST"
+  batch_size: 32
+  shuffle: true
+  data_dir: "./data"
+
+storage:
+  user_data_dir: "./user_data"
+
+logging:
+  log_file: "./collector.log"
