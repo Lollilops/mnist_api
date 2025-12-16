@@ -1,0 +1,16 @@
+service:
+  host: "0.0.0.0"
+  port: 5000
+
+model:
+  models_dir: "./models"
+  input_size: 28
+  num_classes: 10
+
+training:
+  batch_size: 64
+  epochs: 2
+  learning_rate: 0.001
+
+logging:
+  log_file: "./ml_service.log"
