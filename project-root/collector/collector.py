@@ -13,9 +13,6 @@ import torch
 from torchvision import datasets, transforms
 
 
-# =========================
-# Загрузка конфигурации
-# =========================
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
@@ -31,9 +28,6 @@ os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(USER_DATA_DIR, exist_ok=True)
 
 
-# =========================
-# Логирование
-# =========================
 logging.basicConfig(
     filename=LOG_FILE,
     level=logging.INFO,
@@ -43,15 +37,8 @@ logging.basicConfig(
 logger = logging.getLogger("Collector")
 
 
-# =========================
-# Инициализация Flask
-# =========================
 app = Flask(__name__)
 
-
-# =========================
-# Загрузка MNIST
-# =========================
 transform = transforms.Compose([
     transforms.ToTensor()
 ])
@@ -71,10 +58,6 @@ data_loader = torch.utils.data.DataLoader(
 
 data_iter = iter(data_loader)
 
-
-# =========================
-# Вспомогательные функции
-# =========================
 def get_next_batch():
     global data_iter
     try:
@@ -93,10 +76,6 @@ def tensor_to_base64(tensor):
     img.save(buf, format="PNG")
     return base64.b64encode(buf.getvalue()).decode("utf-8")
 
-
-# =========================
-# API endpoints
-# =========================
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -163,9 +142,6 @@ def upload_user_data():
         return jsonify({"error": "Failed to save user data"}), 500
 
 
-# =========================
-# Запуск сервиса
-# =========================
 if __name__ == "__main__":
     logger.info("Collector service started")
     app.run(host=HOST, port=PORT)
