@@ -2,11 +2,8 @@ import yaml
 import logging
 import requests
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-
-# =========================
-# Конфигурация
-# =========================
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
@@ -17,10 +14,6 @@ COLLECTOR_URL = config["services"]["collector_url"]
 ML_URL = config["services"]["ml_service_url"]
 STORAGE_URL = config["services"]["storage_url"]
 
-
-# =========================
-# Логирование
-# =========================
 logging.basicConfig(
     filename=config["logging"]["log_file"],
     level=logging.INFO,
@@ -28,16 +21,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("WebMaster")
 
-
-# =========================
-# Flask
-# =========================
 app = Flask(__name__)
-
-
-# =========================
-# API
-# =========================
+CORS(app)
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -50,14 +35,11 @@ def health():
 def train_model():
     try:
         logger.info("Training requested")
-
-        # 1. Запуск обучения в ML Service
-        resp = requests.post(f"{ML_URL}/train", timeout=300)
+        resp = requests.post(f"{ML_URL}/train", timeout=15 * 60)
         resp.raise_for_status()
 
         model_path = resp.json().get("model_path")
 
-        # 2. Регистрация модели в Storage
         requests.post(
             f"{STORAGE_URL}/models",
             json={
@@ -74,7 +56,7 @@ def train_model():
 
     except Exception as e:
         logger.error(str(e))
-        return jsonify({"error": "Training failed"}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 # ---------- Prediction ----------
@@ -83,8 +65,7 @@ def train_model():
 def predict():
     try:
         data = request.json
-
-        # 1. Отправляем изображение в ML Service
+        logger.info("ML Service Prediction started")
         ml_resp = requests.post(
             f"{ML_URL}/predict",
             json={"image": data["image"]},
@@ -93,8 +74,7 @@ def predict():
         ml_resp.raise_for_status()
 
         prediction = ml_resp.json()
-
-        # 2. Сохраняем изображение в Storage
+        logger.info("Storage image save started")
         img_resp = requests.post(
             f"{STORAGE_URL}/images",
             json={
@@ -106,7 +86,8 @@ def predict():
         img_resp.raise_for_status()
         image_id = img_resp.json()["image_id"]
 
-        # 3. Сохраняем предсказание
+        logger.info("Storage prediction save started")
+        
         requests.post(
             f"{STORAGE_URL}/predictions",
             json={
@@ -116,6 +97,7 @@ def predict():
             },
             timeout=5
         )
+        logger.info("Prediction post back")
 
         return jsonify(prediction), 200
 
@@ -151,10 +133,6 @@ def models():
         logger.error(str(e))
         return jsonify({"error": "Failed to fetch models"}), 500
 
-
-# =========================
-# Run
-# =========================
 if __name__ == "__main__":
     logger.info("Web Master started")
     app.run(host=HOST, port=PORT)
