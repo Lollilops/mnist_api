@@ -1,5 +1,5 @@
 # Базовый образ
-FROM python:3.10-slim
+FROM python:3.11
 
 # Переменные окружения
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -24,6 +24,7 @@ COPY config.yaml .
 
 # Директории для моделей и данных
 RUN mkdir -p models data
+COPY ./models ./models
 
 # Порт сервиса
 EXPOSE 5000
