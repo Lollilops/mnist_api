@@ -8,10 +8,6 @@ from datetime import datetime
 from PIL import Image
 from flask import Flask, request, jsonify
 
-
-# =========================
-# Конфигурация
-# =========================
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
@@ -28,9 +24,6 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 os.makedirs(MODELS_DIR, exist_ok=True)
 
 
-# =========================
-# Логирование
-# =========================
 logging.basicConfig(
     filename=LOG_FILE,
     level=logging.INFO,
@@ -39,15 +32,9 @@ logging.basicConfig(
 logger = logging.getLogger("Storage")
 
 
-# =========================
-# Flask
-# =========================
 app = Flask(__name__)
 
 
-# =========================
-# База данных
-# =========================
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -92,10 +79,6 @@ def init_db():
 
 init_db()
 
-
-# =========================
-# API
-# =========================
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -234,9 +217,6 @@ def list_models():
     return jsonify([dict(row) for row in rows]), 200
 
 
-# =========================
-# Run
-# =========================
 if __name__ == "__main__":
     logger.info("Storage service started")
     app.run(host=HOST, port=PORT)
