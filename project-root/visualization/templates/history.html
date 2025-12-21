@@ -2,27 +2,161 @@
 <html>
 <head>
     <title>History</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 90%;
+            width: 1000px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        
+        .confidence {
+            color: #2196F3;
+            font-weight: 500;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 25px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .back-link:hover {
+            background-color: #45a049;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: 40px 20px;
+            color: #777;
+        }
+        
+        .empty-history p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h2>История предсказаний</h2>
-
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Предсказание</th>
-            <th>Уверенность</th>
-            <th>Время</th>
-        </tr>
-        {% for row in history %}
-        <tr>
-            <td>{{ row.id }}</td>
-            <td>{{ row.predicted_label }}</td>
-            <td>{{ "%.2f"|format(row.confidence * 100) }}%</td>
-            <td>{{ row.created_at }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <p><a href="/">Назад</a></p>
+    <div class="container">
+        <h2>История предсказаний</h2>
+        
+        {% if history %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Предсказание</th>
+                        <th>Уверенность</th>
+                        <th>Время</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in history %}
+                    <tr>
+                        <td>{{ row.id }}</td>
+                        <td><strong>{{ row.predicted_label }}</strong></td>
+                        <td class="confidence">{{ "%.2f"|format(row.confidence * 100) }}%</td>
+                        <td>{{ row.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-history">
+                <p>История предсказаний пуста</p>
+                <p>Нарисуйте цифру на главной странице, чтобы увидеть результаты здесь</p>
+            </div>
+        {% endif %}
+        
+        <div style="text-align: center;">
+            <a href="/" class="back-link">Назад к рисованию</a>
+        </div>
+    </div>
 </body>
 </html>

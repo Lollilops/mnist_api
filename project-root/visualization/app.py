@@ -2,10 +2,6 @@ import yaml
 import requests
 from flask import Flask, render_template, jsonify
 
-
-# =========================
-# Config
-# =========================
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
@@ -13,10 +9,6 @@ HOST = config["service"]["host"]
 PORT = config["service"]["port"]
 WEB_MASTER_URL = config["web_master"]["url"]
 
-
-# =========================
-# Flask
-# =========================
 app = Flask(__name__)
 
 

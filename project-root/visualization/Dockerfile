@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY config.yaml .
 COPY templates ./templates
+COPY static ./static
 
 EXPOSE 8050
 
