@@ -1,6 +1,6 @@
 1.ipynb
 /venv/
-/__pycache__/
+__pycache__
 .gitignore
 .DS_Store
 .gitignore
