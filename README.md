@@ -176,54 +176,72 @@ curl -X POST http://localhost:8000/train
 8. Структура репозитория
 
 project-root/
-│
+
 ├─ collector/         # Сервис Collector
+
 │   ├ Dockerfile
+
 │   ├ collector.py
+
 │   ├ requirements.txt
+
 │   └ config.yaml
+
 │
+
 ├─ storage/           # Сервис Storage
+
 │   ├ Dockerfile
+
 │   ├ storage.py
+
 │   ├ requirements.txt
+
 │   └ config.yaml
+
 │
+
 ├─ ml_service/        # Сервис ML (обучение/инференс)
+
 │   ├ Dockerfile
+
 │   ├ ml_service.py
+
 │   ├ model_utils.py
+
 │   ├ requirements.txt
+
 │   └ config.yaml
+
 │
+
 ├─ web_master/        # Сервис Web Master (API-шлюз)
+
 │   ├ Dockerfile
+
 │   ├ web_master.py
+
 │   ├ requirements.txt
+
 │   └ config.yaml
+
 │
+
 ├─ visualization/     # Сервис Visualization (GUI)
+
 │   ├ Dockerfile
+
 │   ├ app.py (или app_dash.py)
+
 │   ├ requirements.txt
+
 │   └ templates/, static/  # HTML/CSS/JS
+
 │
+
 ├─ docker-compose.yml
+
 └─ README.md
-
-
-⸻
-
-9. Соответствие критериям задания
-	•	✔ микросервисная архитектура
-	•	✔ контейнеризация Docker
-	•	✔ ML-модель и инференс
-	•	✔ дообучение модели
-	•	✔ версионирование моделей
-	•	✔ GUI и сценарии использования
-	•	✔ документация
-
-⸻
 
 Документ с текущими наработками: https://docs.google.com/document/d/14IEYzFgQnvUvveErl0F0XfXogjOCKKrJ5P2XfdgVl_g/edit?usp=sharing
 
